@@ -1,4 +1,17 @@
+const router = require('express').Router();
+const { user,post,comment } = require('../models');
+const withAuth = require('../utils/auth');
+
+
+
+
+
+
+
+
 //Route "/"
+
+
 
 //Route "/login"
 
