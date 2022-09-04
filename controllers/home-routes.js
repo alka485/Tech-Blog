@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { user,post,comment } = require('../models');
+const { User,Post,Comment } = require('../models');
 const withAuth = require('../utils/auth');
 
 // Prevent non logged in users from viewing the homepage
