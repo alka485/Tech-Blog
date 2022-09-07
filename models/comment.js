@@ -1,5 +1,5 @@
 const { Model, DataTypes } = require('sequelize');
-const { DELETE } = require('sequelize/types/query-types');
+//const { DELETE } = require('sequelize/types/query-types');
 const sequelize = require('../config/connection');
 const User = require('./user');
 const Post = require('./post');
