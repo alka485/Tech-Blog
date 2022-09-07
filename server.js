@@ -6,7 +6,7 @@ const routes = require('./controllers');
 const sequelize = require('./config/connection');
 
 const app = express();
-const PORT = process.env.PORT || 3004;
+const PORT = process.env.PORT || 3000;
 
 const hbs = exphbs.create({});
 

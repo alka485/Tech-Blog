@@ -1,5 +1,8 @@
 const { Model, DataTypes } = require('sequelize');
+const { DELETE } = require('sequelize/types/query-types');
 const sequelize = require('../config/connection');
+const User = require('./user');
+const Post = require('./post');
 
 class Comment extends Model {}
 
@@ -15,7 +18,7 @@ Comment.init(
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'user',
+          model: User,
           key: 'id'
         }
       },
@@ -23,7 +26,7 @@ Comment.init(
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'post',
+          model: Post,
           key: 'id'
         }
       },
