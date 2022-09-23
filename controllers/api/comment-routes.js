@@ -1,64 +1,50 @@
-
 const router = require('express').Router();
-const { User,Post,Comment } = require('../../models');
+const { Comment } = require('../../models');
 const withAuth = require('../../utils/auth');
 
-// Prevent non logged in users from viewing the homepage
-router.get('/',withAuth, async (req, res) => {
-    try {
-      const userData = await Comment.findAll({
-        include: [
-          {
-            model: Comment,
-            attributes: ['comment_text', 'created_at'],
-          },
-        ],
-      
+router.get('/', (req, res) => {
+    Comment.findAll({})
+      .then(dbCommentData => res.json(dbCommentData))
+      .catch(err => {
+        console.log(err);
+        res.status(500).json(err);
       });
-  
-      const posts = userData.map((Post) => Post.get({ plain: true }));
-  
-      res.render('homepage', {
-        posts,
-        // Pass the logged in flag to the template
-        logged_in: req.session.logged_in,
+});
+
+router.post('/', withAuth, (req, res) => {
+  // check the session
+  if (req.session) {
+    Comment.create({
+      comment_text: req.body.comment_text,
+      post_id: req.body.post_id,
+      // use the id from the session
+      user_id: req.session.user_id,
+    })
+      .then(dbCommentData => res.json(dbCommentData))
+      .catch(err => {
+        console.log(err);
+        res.status(400).json(err);
       });
-    } catch (err) {
-      res.status(500).json(err);
-    }
-  });
-  
-  router.get('/login', (req, res) => {
-    // If a session exists, redirect the request to the homepage
-    if (req.session.logged_in) {
-      res.redirect('/');
-      return;
-    }
-  
-    res.render('login');
-  });
-  
-  module.exports = router;
-  
+  }
+});
 
+router.delete('/:id', withAuth, (req, res) => {
+    Comment.destroy({
+        where: {
+          id: req.params.id
+        }
+      })
+        .then(dbCommentData => {
+          if (!dbCommentData) {
+            res.status(404).json({ message: 'No comment found with this id' });
+            return;
+          }
+          res.json(dbCommentData);
+        })
+        .catch(err => {
+          console.log(err);
+          res.status(500).json(err);
+        });
+});
 
-
-
-
-
-
-
-//Route "/"
-
-
-
-//Route "/login"
-
-//Route "/dashboard"
-
-//Route "/dashboard/new"
-
-//Route "/dashboard/edit/id"
-
-//Route "/post/id"
-
+module.exports = router;
