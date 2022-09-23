@@ -1,12 +1,12 @@
 
 const router = require('express').Router();
 const { User,Post,Comment } = require('../../models');
-//const withAuth = require('../../utils/auth');
+const withAuth = require('../../utils/auth');
 
 // Prevent non logged in users from viewing the homepage
-router.get('/',  async (req, res) => {
+router.get('/',withAuth, async (req, res) => {
     try {
-      const userData = await Post.findAll({
+      const userData = await Comment.findAll({
         include: [
           {
             model: Comment,
